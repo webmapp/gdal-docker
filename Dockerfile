@@ -34,6 +34,7 @@ RUN curl -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${GDAL_SOURCE} && \
   cd /usr/local/src/gdal-${GDAL_VERSION} && \
   ./configure \
   --with-python \
+  --with-geos \
   --with-spatialite \
   --with-pg \
   --with-curl \
