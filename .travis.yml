@@ -10,6 +10,6 @@ before_install:
   - docker run -it webmapp/gdal-docker:latest ogrinfo --version
   - docker run -it webmapp/gdal-docker:latest ogr2ogr --formats
 
-after_install:
+after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker push webmapp/gdal-docker:latest
