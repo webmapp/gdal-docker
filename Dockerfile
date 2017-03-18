@@ -9,7 +9,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
   build-essential \
   curl \
   zip \
-  awscli \
   unixodbc-dev \
   python-dev \
   python-numpy \
@@ -24,7 +23,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
   libpoppler-dev \
   libspatialite-dev \
   libhdf4-alt-dev \
-  libhdf5-serial-dev
+  libhdf5-serial-dev && \
+
+  curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | python && \
+  pip install awscli
 
 RUN curl -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE} && \
   tar -xzvf /usr/local/src/filgdb_api.tar.gz -C /usr/local
@@ -34,6 +36,7 @@ RUN curl -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${GDAL_SOURCE} && \
   cd /usr/local/src/gdal-${GDAL_VERSION} && \
   ./configure \
   --with-python \
+  --with-geos \
   --with-spatialite \
   --with-pg \
   --with-curl \
