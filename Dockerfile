@@ -5,11 +5,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     build-essential \
     curl \
     zip \
-    apt-transport-https \
     python-dev \
     python-pip \
-    python-setuptools \
-    python-numpy \
     libspatialite-dev \
     sqlite3 \
     libpq-dev \
@@ -19,10 +16,18 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     libgeos-dev \
     libnetcdf-dev \
     libpoppler-dev \
-    libspatialite-dev \
     libhdf4-alt-dev \
     libhdf5-serial-dev && \
     pip install awscli
+
+RUN curl --silent --show-error \
+    https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl --silent --show-error \
+    https://packages.microsoft.com/config/ubuntu/16.10/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y install \
+    unixodbc-dev \
+    msodbcsql=13.1.4.0-1
 
 ENV FGDB_SOURCE https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5/FileGDB_API_1_5_64gcc51.tar.gz
 RUN curl --silent --show-error -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE} && \
@@ -38,6 +43,7 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-geos \
     --with-spatialite \
     --with-pg \
+    --with-odbc \
     --with-curl \
     --with-libkml \
     --with-wfs \
