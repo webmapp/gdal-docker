@@ -4,6 +4,7 @@ MAINTAINER Cole Howard <cole@webmapp.com>
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     build-essential \
     curl \
+    apt-transport-https \
     zip \
     python-dev \
     python-pip \
