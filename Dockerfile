@@ -12,6 +12,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     sqlite3 \
     libpq-dev \
     libcurl4-gnutls-dev \
+    libexpat1-dev \
+    libfreexl-dev \
     libproj-dev \
     libxml2-dev \
     libgeos-dev \
@@ -44,10 +46,11 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-geos \
     --with-spatialite \
     --with-pg \
-    --with-odbc \
+    --with-freexl \
     --with-curl \
     --with-libkml \
     --with-wfs \
+    --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 && \
     make && make install && ldconfig
 
