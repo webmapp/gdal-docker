@@ -7,23 +7,23 @@ Includes read/write support for file geodatabases via ESRI File Geodatabase API 
 
 The following formats are supported:
 ```
-PCIDSK -raster,vector- (rw+v): PCIDSK Database File  
-netCDF -raster,vector- (rw+s): Network Common Data Format  
-PDF -raster,vector- (w+): Geospatial PDF  
-ESRI Shapefile -vector- (rw+v): ESRI Shapefile  
-MapInfo File -vector- (rw+v): MapInfo File  
-UK .NTF -vector- (ro): UK .NTF  
-OGR_SDTS -vector- (ro): SDTS  
-S57 -vector- (rw+v): IHO S-57 (ENC)  
-DGN -vector- (rw+): Microstation DGN  
-OGR_VRT -vector- (rov): VRT - Virtual Datasource  
-REC -vector- (ro): EPIInfo .REC  
-Memory -vector- (rw+): Memory  
-BNA -vector- (rw+v): Atlas BNA  
-CSV -vector- (rw+v): Comma Separated Value (.csv)  
-GML -vector- (rw+v): Geography Markup Language (GML)  
-GPX -vector- (rw+v): GPX  
-KML -vector- (rw+v): Keyhole Markup Language (KML)  
+PCIDSK -raster,vector- (rw+v): PCIDSK Database File
+netCDF -raster,vector- (rw+s): Network Common Data Format
+PDF -raster,vector- (w+): Geospatial PDF
+ESRI Shapefile -vector- (rw+v): ESRI Shapefile
+MapInfo File -vector- (rw+v): MapInfo File
+UK .NTF -vector- (ro): UK .NTF
+OGR_SDTS -vector- (ro): SDTS
+S57 -vector- (rw+v): IHO S-57 (ENC)
+DGN -vector- (rw+): Microstation DGN
+OGR_VRT -vector- (rov): VRT - Virtual Datasource
+REC -vector- (ro): EPIInfo .REC
+Memory -vector- (rw+): Memory
+BNA -vector- (rw+v): Atlas BNA
+CSV -vector- (rw+v): Comma Separated Value (.csv)
+GML -vector- (rw+v): Geography Markup Language (GML)
+GPX -vector- (rw+v): GPX
+KML -vector- (rw+v): Keyhole Markup Language (KML)
 GeoJSON -vector- (rw+v): GeoJSON
 OGR_GMT -vector- (rw+): GMT ASCII Vectors (.gmt)
 GPKG -raster,vector- (rw+vs): GeoPackage
@@ -60,6 +60,7 @@ Idrisi -vector- (rov): Idrisi Vector (.vct)
 ARCGEN -vector- (rov): Arc/Info Generate
 SEGUKOOA -vector- (rov): SEG-P1 / UKOOA P1/90
 SEGY -vector- (rov): SEG-Y
+XLS -vector- (ro): MS Excel format
 ODS -vector- (rw+v): Open Document/ LibreOffice / OpenOffice Spreadsheet
 XLSX -vector- (rw+v): MS Office Open XML spreadsheet
 ElasticSearch -vector- (rw+): Elastic Search
