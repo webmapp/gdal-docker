@@ -6,6 +6,39 @@ GDAL Docker container with AWSCLI.
 Includes read/write support for file geodatabases via ESRI File Geodatabase API 1.5 and
 Microsoft ODBC 13.1 driver with SQLCMD and BCP.
 
+## Examples
+* Convert an ArcGIS Server service to GeoJSON
+```
+ogr2ogr -f GeoJSON test.json \
+"http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hydrography/Watershed173811/FeatureServer/0/query?where=objectid+%3D+objectid&outfields=*&f=json" OGRGeoJSON
+```
+
+* Convert the same ArcGIS Server service to file geodatabase, giving the layer a name
+```
+ogr2ogr -f FileGDB test.gdb \
+"http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hydrography/Watershed173811/FeatureServer/0/query?where=objectid+%3D+objectid&outfields=*&f=json" OGRGeoJSON \
+-nln watershed
+```
+
+* Load a file geodatabase from the web into Postgresql.  
+First, get layer info from the zipped fgdb...
+```
+ogrinfo "http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip"
+ERROR 6: Update from remote service not supported
+Had to open data source read-only.
+INFO: Open of `http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip'
+      using driver `OpenFileGDB' successful.
+1: AFG_adm0 (Multi Polygon)
+2: AFG_adm1 (Multi Polygon)
+3: AFG_adm2 (Multi Polygon)
+```
+Then load into Postgres using the selected layer name from ogrinfo. 
+```
+ogr2ogr -f "PostgreSQL" PG:"host=myhost user=myloginname dbname=mydbname password=mypassword" \
+"http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip" AFG_adm0
+```
+
+## Formats
 The following formats are supported:
 ```
 PCIDSK -raster,vector- (rw+v): PCIDSK Database File
