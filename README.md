@@ -1,9 +1,10 @@
 # gdal-docker
 [![Build Status](https://travis-ci.org/webmapp/gdal-docker.svg?branch=master)](https://travis-ci.org/webmapp/gdal-docker)
 
-GDAL Docker container with AWS CLI. Built for easy use with [AWS Batch](https://aws.amazon.com/batch/)
+GDAL Docker container with AWSCLI.
 
-Includes read/write support for file geodatabases via ESRI File Geodatabase API 1.5
+Includes read/write support for file geodatabases via ESRI File Geodatabase API 1.5 and
+Microsoft ODBC 13.1 driver with SQLCMD and BCP.
 
 The following formats are supported:
 ```
