@@ -25,7 +25,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     locale-gen en_US.UTF-8 && \
 
     curl --silent --show-error --retry 3 https://bootstrap.pypa.io/get-pip.py | python && \
-    pip install awscli
+    pip install awscli && \
+
+    mkdir -p /data
 
 RUN curl --silent --show-error \
     https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
@@ -59,8 +61,9 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-wfs \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 && \
-    make -j 6 && make install && ldconfig
+    make && make install && ldconfig
 
+VOLUME /data
 ENV PATH "$PATH:/opt/mssql-tools/bin"
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib
 CMD ["ogr2ogr", "--formats"]
