@@ -63,7 +63,8 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 && \
     make && make install && ldconfig
 
+WORKDIR /data
 VOLUME /data
 ENV PATH "$PATH:/opt/mssql-tools/bin"
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib"
 CMD ["ogr2ogr", "--formats"]
