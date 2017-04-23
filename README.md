@@ -5,25 +5,25 @@
 GDAL Docker container with AWSCLI, read/write support for file geodatabases via ESRI File Geodatabase API 1.5 and Microsoft ODBC 13.1 driver with SQLCMD and BCP.
 
 ## Examples
-* Convert an ArcGIS Server service to GeoJSON
+Convert an ArcGIS Server service to GeoJSON
 ```
-docker run -v $PWD:/data -it webmapp/gdal-docker \
-ogr2ogr -f GeoJSON /data/test.json \
+$ docker run -v $PWD:/data webmapp/gdal-docker \
+ogr2ogr -f GeoJSON watershed.json \
 "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hydrography/Watershed173811/FeatureServer/0/query?where=objectid+%3D+objectid&outfields=*&f=json" OGRGeoJSON
 ```
 
-* Convert the same ArcGIS Server service to file geodatabase, giving the layer a name
+Convert the same ArcGIS Server service to file geodatabase, giving the layer a name
 ```
-docker run -v $PWD:/data -it webmapp/gdal-docker \
-ogr2ogr -f FileGDB /data/test.gdb \
+$ docker run -v $PWD:/data webmapp/gdal-docker \
+ogr2ogr -f FileGDB hydrography.gdb \
 "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hydrography/Watershed173811/FeatureServer/0/query?where=objectid+%3D+objectid&outfields=*&f=json" OGRGeoJSON \
 -nln watershed
 ```
 
-* Load a file geodatabase from the web into Postgresql.  
+Load a file geodatabase from the web into Postgresql.  
 First, get layer info from the zipped fgdb...
 ```
-docker run -it webmapp/gdal-docker ogrinfo "http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip"
+$ docker run webmapp/gdal-docker ogrinfo "http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip"
 ERROR 6: Update from remote service not supported
 Had to open data source read-only.
 INFO: Open of `http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip'
@@ -34,7 +34,7 @@ INFO: Open of `http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip'
 ```
 Then load into Postgres using the selected layer name from ogrinfo.
 ```
-docker run -it webmapp/gdal-docker ogr2ogr -f "PostgreSQL" PG:"host=myhost user=myloginname dbname=mydbname password=mypassword" \
+$ docker run webmapp/gdal-docker ogr2ogr -f "PostgreSQL" PG:"host=myhost user=myloginname dbname=mydbname password=mypassword" \
 "http://biogeo.ucdavis.edu/data/gadm2.8/gdb/AFG_adm_gdb.zip" AFG_adm0
 ```
 
