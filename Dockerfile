@@ -1,9 +1,10 @@
 FROM ubuntu:16.10
 MAINTAINER Cole Howard <cole@webmapp.com>
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     build-essential \
     curl \
+    ca-certificates \
     apt-transport-https \
     zip \
     locales \
@@ -21,23 +22,26 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     libpoppler-dev \
     libhdf4-alt-dev \
     libhdf5-serial-dev && \
+    rm -rf /var/lib/apt/lists/* && \
 
     locale-gen en_US.UTF-8 && \
 
     curl --silent --show-error --retry 3 https://bootstrap.pypa.io/get-pip.py | python && \
-    pip install awscli && \
-
     mkdir -p /data
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 RUN curl --silent --show-error \
     https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl --silent --show-error \
     https://packages.microsoft.com/config/ubuntu/16.10/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
-    ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y install \
+    ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     unixodbc-dev \
     msodbcsql=13.1.4.0-1 \
-    mssql-tools
+    mssql-tools && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV FGDB_SOURCE https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5/FileGDB_API_1_5_64gcc51.tar.gz
 RUN curl --silent --show-error -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE} && \
@@ -61,7 +65,7 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-wfs \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 && \
-    make && make install && ldconfig
+    make -j 4 && make install && ldconfig
 
 WORKDIR /data
 VOLUME /data
