@@ -23,9 +23,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-rec
     libhdf4-alt-dev \
     libhdf5-serial-dev && \
     rm -rf /var/lib/apt/lists/* && \
-
     locale-gen en_US.UTF-8 && \
-
     curl --silent --show-error --retry 3 https://bootstrap.pypa.io/get-pip.py | python && \
     mkdir -p /data
 
@@ -35,7 +33,7 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 RUN curl --silent --show-error \
     https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl --silent --show-error \
-    https://packages.microsoft.com/config/ubuntu/16.10/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
     ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     unixodbc-dev \
@@ -65,7 +63,7 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-wfs \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 && \
-    make -j 4 && make install && ldconfig
+    make && make install && ldconfig
 
 WORKDIR /data
 VOLUME /data
