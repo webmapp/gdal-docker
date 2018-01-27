@@ -1,6 +1,5 @@
 # gdal-docker
 [![dockeri.co](http://dockeri.co/image/webmapp/gdal-docker)](https://hub.docker.com/r/webmapp/gdal-docker/)  
-[![Build Status](https://travis-ci.org/webmapp/gdal-docker.svg?branch=master)](https://travis-ci.org/webmapp/gdal-docker)
 
 GDAL Docker container with AWSCLI, read/write support for file geodatabases via ESRI File Geodatabase API 1.5 and Microsoft ODBC 13.1 driver with SQLCMD and BCP.  
 
