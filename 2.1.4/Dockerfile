@@ -2,7 +2,9 @@ FROM ubuntu:16.04
 MAINTAINER Cole Howard <cole@webmapp.com>
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
-    build-essential \
+    gcc \
+    g++ \
+    make \
     curl \
     ca-certificates \
     apt-transport-https \
