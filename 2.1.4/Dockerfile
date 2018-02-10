@@ -35,11 +35,11 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 RUN curl --silent --show-error \
     https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl --silent --show-error \
-    https://packages.microsoft.com/config/ubuntu/16.10/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
     ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     unixodbc-dev \
-    msodbcsql=13.1.4.0-1 \
+    msodbcsql \
     mssql-tools && \
     rm -rf /var/lib/apt/lists/*
 
