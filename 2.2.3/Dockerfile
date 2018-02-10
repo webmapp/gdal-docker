@@ -37,7 +37,7 @@ RUN curl --silent --show-error \
     apt-get update && \
     ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     unixodbc-dev \
-    msodbcsql=13.1.4.0-1 \
+    msodbcsql \
     mssql-tools && \
     rm -rf /var/lib/apt/lists/*
 
