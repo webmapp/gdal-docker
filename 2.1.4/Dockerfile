@@ -23,9 +23,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-rec
     libhdf4-alt-dev \
     libhdf5-serial-dev && \
     rm -rf /var/lib/apt/lists/* && \
-
     locale-gen en_US.UTF-8 && \
-
     curl --silent --show-error --retry 3 https://bootstrap.pypa.io/get-pip.py | python && \
     mkdir -p /data
 
@@ -65,7 +63,7 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-wfs \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 && \
-    make -j 4 && make install && ldconfig
+    make && make install && ldconfig
 
 WORKDIR /data
 VOLUME /data

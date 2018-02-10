@@ -65,7 +65,7 @@ RUN wget -O /usr/local/src/gdal-trunk.zip ${GDAL_SOURCE} && \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 \
     --with-static-proj4 && \
-    make -j 8 && make install && ldconfig
+    make && make install && ldconfig
 
 WORKDIR /data
 VOLUME /data
