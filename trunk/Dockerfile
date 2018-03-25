@@ -51,10 +51,10 @@ RUN curl --silent --show-error -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE
     rm /usr/local/FileGDB_API-64gcc51/lib/libstdc++.so.6 && \
     ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/local/FileGDB_API-64gcc51/lib/libstdc++.so.6
 
-ENV GDAL_SOURCE https://github.com/OSGeo/gdal/archive/trunk.zip
-RUN wget -O /usr/local/src/gdal-trunk.zip ${GDAL_SOURCE} && \
-    unzip /usr/local/src/gdal-trunk.zip -d /usr/local/src && \
-    cd /usr/local/src/gdal-trunk/gdal && \
+ENV GDAL_SOURCE https://github.com/OSGeo/gdal/archive/master.zip
+RUN wget -O /usr/local/src/gdal-master.zip ${GDAL_SOURCE} && \
+    unzip /usr/local/src/gdal-master.zip -d /usr/local/src && \
+    cd /usr/local/src/gdal-master/gdal && \
     ./configure \
     --with-python \
     --with-geos \
