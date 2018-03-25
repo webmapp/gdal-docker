@@ -3,6 +3,10 @@
 
 GDAL Docker container with AWSCLI, read/write support for file geodatabases via ESRI File Geodatabase API 1.5 and Microsoft ODBC 13.1 driver with SQLCMD and BCP.  
 
+## Tags
+Each stable GDAL release has a corresponding tag. GDAL trunk is built nightly from  
+the Github master branch and is available on the `latest` tag
+
 ## Formats
 The following formats are supported:
 ```
