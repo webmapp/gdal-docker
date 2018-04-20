@@ -50,6 +50,7 @@ RUN curl --silent --show-error -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE
     tar -xzvf /usr/local/src/filgdb_api.tar.gz -C /usr/local && \
     rm /usr/local/FileGDB_API-64gcc51/lib/libstdc++.so.6 && \
     ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/local/FileGDB_API-64gcc51/lib/libstdc++.so.6
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib"
 
 ENV GDAL_SOURCE https://github.com/OSGeo/gdal/archive/master.zip
 RUN wget -O /usr/local/src/gdal-master.zip ${GDAL_SOURCE} && \
@@ -67,10 +68,9 @@ RUN wget -O /usr/local/src/gdal-master.zip ${GDAL_SOURCE} && \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 \
     --with-static-proj4 && \
-    make && make install && ldconfig
+    make -j 6 && make install && ldconfig
 
 WORKDIR /data
 VOLUME /data
 ENV PATH "$PATH:/opt/mssql-tools/bin"
-ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib"
 CMD ["ogr2ogr", "--formats"]
