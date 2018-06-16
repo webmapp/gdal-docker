@@ -2,7 +2,9 @@ FROM ubuntu:16.04
 MAINTAINER Cole Howard <cole@webmapp.com>
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
-    build-essential \
+    gcc \
+    g++ \
+    make \
     wget \
     curl \
     ca-certificates \
@@ -39,7 +41,7 @@ RUN curl --silent --show-error \
     apt-get update && \
     ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     unixodbc-dev \
-    msodbcsql=13.1.4.0-1 \
+    msodbcsql \
     mssql-tools && \
     rm -rf /var/lib/apt/lists/*
 
@@ -48,11 +50,12 @@ RUN curl --silent --show-error -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE
     tar -xzvf /usr/local/src/filgdb_api.tar.gz -C /usr/local && \
     rm /usr/local/FileGDB_API-64gcc51/lib/libstdc++.so.6 && \
     ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/local/FileGDB_API-64gcc51/lib/libstdc++.so.6
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib"
 
-ENV GDAL_SOURCE https://github.com/OSGeo/gdal/archive/trunk.zip
-RUN wget -O /usr/local/src/gdal-trunk.zip ${GDAL_SOURCE} && \
-    unzip /usr/local/src/gdal-trunk.zip -d /usr/local/src && \
-    cd /usr/local/src/gdal-trunk/gdal && \
+ENV GDAL_SOURCE https://github.com/OSGeo/gdal/archive/master.zip
+RUN wget -O /usr/local/src/gdal-master.zip ${GDAL_SOURCE} && \
+    unzip /usr/local/src/gdal-master.zip -d /usr/local/src && \
+    cd /usr/local/src/gdal-master/gdal && \
     ./configure \
     --with-python \
     --with-geos \
@@ -65,10 +68,9 @@ RUN wget -O /usr/local/src/gdal-trunk.zip ${GDAL_SOURCE} && \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
     --with-fgdb=/usr/local/FileGDB_API-64gcc51 \
     --with-static-proj4 && \
-    make -j 8 && make install && ldconfig
+    make && make install && ldconfig
 
 WORKDIR /data
 VOLUME /data
 ENV PATH "$PATH:/opt/mssql-tools/bin"
-ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib"
 CMD ["ogr2ogr", "--formats"]
