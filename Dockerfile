@@ -4,6 +4,7 @@ MAINTAINER Cole Howard <cole@webmapp.com>
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     gcc \
     g++ \
+    gnupg2 \
     make \
     wget \
     curl \
@@ -33,9 +34,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-rec
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
-
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
-    gnupg2
 
 RUN curl --silent --show-error \
     https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
