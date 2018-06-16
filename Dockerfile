@@ -1,14 +1,16 @@
-FROM ubuntu:16.04
+FROM debian:stretch-slim
 MAINTAINER Cole Howard <cole@webmapp.com>
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     gcc \
     g++ \
     make \
+    wget \
     curl \
     ca-certificates \
     apt-transport-https \
     zip \
+    unzip \
     locales \
     python-dev \
     libspatialite-dev \
@@ -32,16 +34,20 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-rec
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
+    gnupg2
+
 RUN curl --silent --show-error \
     https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl --silent --show-error \
-    https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
     ACCEPT_EULA=Y DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install \
     unixodbc-dev \
-    msodbcsql \
+    msodbcsql17 \
     mssql-tools && \
     rm -rf /var/lib/apt/lists/*
+ENV PATH "$PATH:/opt/mssql-tools/bin"
 
 ENV FGDB_SOURCE https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5/FileGDB_API_1_5_64gcc51.tar.gz
 RUN curl --silent --show-error -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE} && \
@@ -50,11 +56,10 @@ RUN curl --silent --show-error -o /usr/local/src/filgdb_api.tar.gz ${FGDB_SOURCE
     ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/local/FileGDB_API-64gcc51/lib/libstdc++.so.6
 ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/FileGDB_API-64gcc51/lib"
 
-ENV GDAL_VERSION 2.2.4
-ENV GDAL_SOURCE http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz
-RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${GDAL_SOURCE} && \
-    tar -xzvf /usr/local/src/gdal-${GDAL_VERSION}.tar.gz -C /usr/local/src && \
-    cd /usr/local/src/gdal-${GDAL_VERSION} && \
+ENV GDAL_SOURCE https://github.com/OSGeo/gdal/archive/master.zip
+RUN wget -O /usr/local/src/gdal-master.zip ${GDAL_SOURCE} && \
+    unzip /usr/local/src/gdal-master.zip -d /usr/local/src && \
+    cd /usr/local/src/gdal-master/gdal && \
     ./configure \
     --with-python \
     --with-geos \
@@ -63,12 +68,11 @@ RUN curl --silent --show-error -o /usr/local/src/gdal-${GDAL_VERSION}.tar.gz ${G
     --with-freexl \
     --with-curl \
     --with-libkml \
-    --with-wfs \
     --with-odbc=/opt/microsoft/msodbcsql/lib64 \
-    --with-fgdb=/usr/local/FileGDB_API-64gcc51 && \
+    --with-fgdb=/usr/local/FileGDB_API-64gcc51 \
+    --with-static-proj4 && \
     make && make install && ldconfig
 
 WORKDIR /data
 VOLUME /data
-ENV PATH "$PATH:/opt/mssql-tools/bin"
 CMD ["ogr2ogr", "--formats"]
